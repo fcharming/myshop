@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.core.urlresolvers import reverse
 
 # Create your models here.
 class Category(models.Model):
@@ -15,6 +16,9 @@ class Category(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('shop:product_list_by_category',args=[self.slug])
 
 class Product(models.Model):
     category = models.ForeignKey(Category,related_name='products')
@@ -35,3 +39,6 @@ class Product(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('shop:product_detail',args=[self.id,self.slug])

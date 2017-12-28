@@ -9,7 +9,7 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name','slug']
     #使用prepopulated_fields 属性来指定那些要使用其他字段来自动赋值的字段
     prepopulated_fields = {'slug':('name',)}
-admin.register(Category,CategoryAdmin)
+admin.site.register(Category,CategoryAdmin)
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['name', 'slug', 'price', 'stock',
@@ -17,4 +17,4 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ['available','created','updated']
     list_editable = ['price','stock','available']
     prepopulated_fields = {'slug':('name',)}
-admin.register(Product,ProductAdmin)
+admin.site.register(Product,ProductAdmin)
