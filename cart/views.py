@@ -17,7 +17,7 @@ def cart_add(request,product_id):
     form = CartAddProductForm(request.POST)
     if form.is_valid():
         cd = form.cleaned_data
-        cart.add(product=product,quantity=cd['quantity'],update_quantity=cd['update_quantity'])
+        cart.add(product=product,quantity=cd['quantity'],update_quantity=cd['update'])
     return redirect('cart:cart_detail')
 
 def cart_remove(request,product_id):
@@ -28,4 +28,6 @@ def cart_remove(request,product_id):
 
 def cart_detail(request):
     cart = Cart(request)
-    render(request,'cart/detail.html',{'cart':cart})
+    for item in cart:
+        item['update_quantity_form'] = CartAddProductForm(initial={'quantity':item['quantity'],'update':True})
+    return render(request,'cart/detail.html',{'cart':cart})
