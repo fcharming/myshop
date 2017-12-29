@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'shop',
     'cart',
     'orders',
+    'paypal.standard.ipn',
+    'payment',
 ]
 
 MIDDLEWARE = [
@@ -128,3 +130,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 #cart session
 CART_SESSION_ID = 'cart'
+
+# django-paypal settings
+PAYPAL_RECEIVER_EMAIL = 'fengjiamhu@qq.com'
+PAYPAL_TEST = True
