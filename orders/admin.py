@@ -6,6 +6,7 @@ from .models import Order,OrderItem
 import datetime
 import csv
 from django.http import HttpResponse
+from django.core.urlresolvers import reverse
 
 import sys
 reload(sys)
@@ -36,11 +37,15 @@ def export_to_csv(modeladmin,request,queryset):
     return response
 export_to_csv.short_description = 'Export to CSV'
 
+def order_detail(obj):
+    return '<a href="{}">View</a>'.format(reverse('orders:admin_order_detail', args=[obj.id]))
+#avoid auto-escaping
+order_detail.allow_tags = True
 
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['id', 'first_name', 'last_name', 'email',
                     'address', 'postal_code', 'city', 'paid',
-                    'created', 'updated']
+                    'created', 'updated', order_detail]
     list_filter = ['paid', 'created', 'updated']
     inlines = [OrderItemInline]
     actions = [export_to_csv]
