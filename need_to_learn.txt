@@ -1,0 +1,55 @@
+第七章：myshop
+1、创建category products的class数据库model，创建目录、详情视图。
+
+2、使用Django会话request.session保存cart购物车
+settings.py中CART_SESSION_ID = 'cart'
+cart.py用来管理购物车，定义add remove save __iter__ __len__ get_total_price clear等方法
+cart是一个dict，用来存储产品id、数量、价格等信息
+
+3.添加物品到购物城forms.py表单，新建cart_add  cart_remove  cart_detail视图
+将表单添加到product detail页面
+
+4.允许用户在购物车中更改产品数量：
+car_detail视图新增一个form视图，并传给模板
+
+5.上下文（context)
+在cart中新建context_processors.py
+from .cart import Cart
+    def cart(request):
+        return {'cart': Cart(request)}
+他是一个上下文处理器是一个函数，这个函数接收一个request 对象作为参数，
+然后返回一个对象字典，这些对象可用于所有使用RequestContext 渲染的模板。
+编辑项目中的 settings.py ，然后把 cart.context_processors.cart
+添加进TEMPLATE 内的context_processors 选项中。
+之后修改base.html
+
+6.保存用户订单order
+新建order app，新建Order和OrderItem
+admin register时，OrderItemInline作为OrderAdmin的inlines
+用户添加购物车-->place order填写order信息-->创建order-->order创建成功
+
+第八章：支付
+django-paypal
+1、创建payment app，与paypal.standard.ipn加入INSTALLED_APPS
+
+2、payment_process视图
+在order_create视图中，request.session['order_id'] = order.id
+构建一个dict信息，form = PayPalPaymentsForm(initial=paypal_dict)
+
+3、添加payment_done与payment_canceled视图
+
+4、添加定制操作到管理平台站点中：导出csv
+编辑admin.py，在对应class前面加上def方法def export_to_csv(modeladmin, request, queryset):
+之后将def作为actions添加给对应class
+
+5、通过定制视图扩展管理站点
+编辑admin.py：在OrderAdmin类上面添加：
+def order_detail(obj):
+    return '<a href="{}">View</a>'.format(
+    reverse('orders:admin_order_detail', args=[obj.id]))
+order_detail.allow_tags = True
+之后将order_detail加入到对应class的list_display中
+
+
+
+
